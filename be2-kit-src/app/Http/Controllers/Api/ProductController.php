@@ -43,6 +43,14 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    public function like(string $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->increment('like');
+
+        return new ProductResource($product);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

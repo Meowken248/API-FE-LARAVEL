@@ -20,6 +20,7 @@ class ProductResource extends JsonResource
             'photo' => $this->photo,
             'description' => $this->description,
             'price' => (float)$this->price,
+            'like' => $this->like,
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
         ];
         // return parent::toArray($request);

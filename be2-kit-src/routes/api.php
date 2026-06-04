@@ -12,5 +12,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('products',ApiProductController::class);
+Route::post('products/{id}/like', [ApiProductController::class, 'like']);
 Route::get('products/{id}/comments', [ApiCommentController::class, 'index']);
 Route::post('products/{id}/comments', [ApiCommentController::class, 'store']);

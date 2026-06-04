@@ -44,6 +44,9 @@
                     <h2 class="mb-2 text-2xl font-bold">${product.name}</h2>
                     <p class="mb-2 text-red-500">Giá: ${product.price} đ</p>${product.photo ? `<img class="mb-4 max-h-72 rounded object-cover" src="${product.photo}" alt="${product.name}">` : ''}
                     <div class="mb-4">${product.description ?? ''}</div>
+                    <button onclick="like(${product.id})">
+                       &#10084 <span id="like-count">${product.like} lượt thích</span>
+                    </button>
                     <h3 class="mb-2 font-semibold">Bình luận</h3>
                     <div class="mb-4">
                         <input type="text" id="content" class="border p-2">
@@ -81,6 +84,18 @@
                 </ul>
             `;
             contentInput.value = '';
+        }
+
+        async function like(id) {
+            const response = await fetch(`/api/products/${id}/like`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            document.querySelector('#like-count').textContent = result.data.like;
         }
     </script>
 </body>
