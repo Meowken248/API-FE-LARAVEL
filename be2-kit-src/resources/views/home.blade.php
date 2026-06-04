@@ -45,12 +45,43 @@
                     <p class="mb-2 text-red-500">Giá: ${product.price} đ</p>${product.photo ? `<img class="mb-4 max-h-72 rounded object-cover" src="${product.photo}" alt="${product.name}">` : ''}
                     <div class="mb-4">${product.description ?? ''}</div>
                     <h3 class="mb-2 font-semibold">Bình luận</h3>
-                    <ul class="list-disc pl-5">
-                        ${product.comments.map((comment) => `<li class="mb-1">${comment.content} <br> Time: ${comment.created_at}</li>`).join('')}
-                    </ul>
+                    <div class="mb-4">
+                        <input type="text" id="content" class="border p-2">
+                        <button class="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700" onclick="comment(${product.id})">Send</button>
+                    </div>
+                    <div class="comment-list rounded border p-4">
+                        <ul>
+                            ${product.comments.map((comment) => `<li class="rounded border p-2">${comment.content} ${comment.created_at}</li>`).join('')}
+                        </ul>
+                    </div>
                 `;
             });
         });
+
+        async function comment(id) {
+            const contentInput = document.querySelector('#content');
+            const commentList = document.querySelector('.comment-list');
+
+            const response = await fetch(`/api/products/${id}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: contentInput.value
+                })
+            });
+
+            const result = await response.json();
+
+            commentList.innerHTML = `
+                <ul>
+                    ${result.data.map((comment) => `<li class="rounded border p-2">${comment.content} ${comment.created_at}</li>`).join('')}
+                </ul>
+            `;
+            contentInput.value = '';
+        }
     </script>
 </body>
 
